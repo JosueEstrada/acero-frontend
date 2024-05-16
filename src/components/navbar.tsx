@@ -30,10 +30,10 @@ export default function Navbar() {
     <>
       <div className="flex items-center justify-center gap-2 bg-primary py-2 text-sm text-white dark:bg-primary/50">
         <PhoneIcon className="h-4 w-4" />
-        <span>123-456-7890</span>
+        <span>925 110 992</span>
         <span className="mx-4">|</span>
         <MailIcon className="h-4 w-4" />
-        <span>info@example.com</span>
+        <span>proyectos@solinoxperu.com</span>
       </div>
       <header className="sticky top-0 z-[20] bg-background py-4 shadow-sm">
         <div className="container mx-auto flex items-center justify-between px-4 md:px-6">
