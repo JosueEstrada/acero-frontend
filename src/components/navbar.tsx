@@ -34,7 +34,7 @@ export default function Navbar() {
         <MailIcon className="h-4 w-4" />
         <span>info@example.com</span>
       </div>
-      <header className="py-4 shadow-sm">
+      <header className="sticky top-0 z-[9999] bg-background py-4 shadow-sm">
         <div className="container mx-auto flex items-center justify-between px-4 md:px-6">
           <Link className="flex items-center gap-2" href="/">
             <MountainIcon className="h-6 w-6" />
@@ -103,7 +103,7 @@ export default function Navbar() {
                 <span className="sr-only">Toggle navigation menu</span>
               </Button>
             </SheetTrigger>
-            <SheetContent side="left">
+            <SheetContent side="left" className="z-[99999]">
               <nav className="grid gap-6 text-lg font-medium">
                 <Link
                   href="/"

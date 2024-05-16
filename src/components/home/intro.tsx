@@ -3,7 +3,7 @@ import Link from "next/link";
 
 export default function IntroSection() {
   return (
-    <section className="relative w-full py-12 md:py-24 lg:py-32">
+    <section className="relative w-full py-12 md:py-24 lg:py-16">
       <div className="container relative z-10 px-4 md:px-6">
         <div className="grid gap-6 lg:grid-cols-[1fr_550px] lg:gap-12 xl:grid-cols-[1fr_650px]">
           <div className="flex flex-col justify-center space-y-4">

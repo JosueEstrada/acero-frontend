@@ -2,7 +2,7 @@ import Image from "next/image";
 
 export default function ServicesSection() {
   return (
-    <section className="w-full pb-12 md:pb-24 lg:pb-32">
+    <section className="w-full pb-12 md:pb-24 lg:pb-16">
       <div className="container px-4 md:px-6">
         <div className="space-y-4 text-center">
           <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">

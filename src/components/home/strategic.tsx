@@ -7,7 +7,7 @@ import {
 
 export default function StrategicSection() {
   return (
-    <section className="w-full bg-gray-100 py-12 dark:bg-gray-800 md:py-24 lg:py-32">
+    <section className="w-full bg-gray-100 py-12 dark:bg-gray-800 md:py-24 lg:py-16">
       <div className="container px-4 md:px-6">
         <div className="space-y-4 text-center">
           <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
