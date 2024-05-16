@@ -45,14 +45,14 @@ export default function PrototipoSection() {
                     onChange={(e) => setHeight(Number(e.target.value))}
                   />
                 </div>
-                <div className="space-y-2">
+                {/* <div className="space-y-2">
                   <Label htmlFor="width">Anchura</Label>
                   <Input
                     id="width"
                     placeholder="Ingresa anchura"
                     type="number"
                   />
-                </div>
+                </div> */}
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
@@ -76,7 +76,7 @@ export default function PrototipoSection() {
                   />
                 </div>
               </div>
-              <div className="space-y-2">
+              {/* <div className="space-y-2">
                 <Label htmlFor="material">Material</Label>
                 <Select defaultValue="plastic" id="material">
                   <SelectTrigger>
@@ -88,7 +88,7 @@ export default function PrototipoSection() {
                     <SelectItem value="wood">Carbono</SelectItem>
                   </SelectContent>
                 </Select>
-              </div>
+              </div> */}
               <Button className="w-full" type="submit">
                 Genera tu prototipo y envíalo a producción
               </Button>
