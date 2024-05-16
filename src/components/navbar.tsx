@@ -103,7 +103,7 @@ export default function Navbar() {
                 <span className="sr-only">Toggle navigation menu</span>
               </Button>
             </SheetTrigger>
-            <SheetContent side="left" className="z-[99999]">
+            <SheetContent side="left" className="z-[50]">
               <nav className="grid gap-6 text-lg font-medium">
                 <Link
                   href="/"
