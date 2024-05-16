@@ -7,6 +7,12 @@ import {
   MountainIcon,
   PhoneIcon,
 } from "@/components/icons";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -85,6 +91,7 @@ export default function Navbar() {
             </DropdownMenu>
             <ModeToggle />
           </nav>
+          {/* Sidebar nav */}
           <Sheet>
             <SheetTrigger asChild>
               <Button
@@ -123,24 +130,54 @@ export default function Navbar() {
                 >
                   Certificaciones
                 </Link>
-                <Link
-                  href="/servicios"
-                  className="text-muted-foreground hover:text-foreground"
-                >
-                  Servicios
-                </Link>
+                <Accordion type="single" collapsible>
+                  <AccordionItem value="item-1" className="border-none">
+                    <AccordionTrigger>
+                      <Link
+                        href="/servicios"
+                        className="text-muted-foreground hover:text-foreground"
+                      >
+                        Servicios
+                      </Link>
+                    </AccordionTrigger>
+                    <AccordionContent>
+                      <Link href="/acero">Tanques de Acero</Link>
+                    </AccordionContent>
+                    <AccordionContent>
+                      <Link href="/fibra">Tanques de Fibra de Vidrio</Link>
+                    </AccordionContent>
+                    <AccordionContent>
+                      <Link href="/residual">
+                        Tanques para Tratamiento de Agua Residual
+                      </Link>
+                    </AccordionContent>
+                    <AccordionContent>
+                      <Link href="/mas-servicios">Más servicios</Link>
+                    </AccordionContent>
+                  </AccordionItem>
+                </Accordion>
                 <Link
                   href="/blog"
                   className="text-muted-foreground hover:text-foreground"
                 >
                   Blog
                 </Link>
-                <Link
-                  href="/contacto"
-                  className="text-muted-foreground hover:text-foreground"
-                >
-                  Contacto
-                </Link>
+                <Accordion type="single" collapsible>
+                  <AccordionItem value="item-1" className="border-none">
+                    <AccordionTrigger>
+                      <Link
+                        href="/contacto"
+                        className="text-muted-foreground hover:text-foreground"
+                      >
+                        Contacto
+                      </Link>
+                    </AccordionTrigger>
+
+                    <AccordionContent>
+                      <Link href="/agendar-cita">Agendar cita</Link>
+                    </AccordionContent>
+                  </AccordionItem>
+                </Accordion>
                 <ModeToggleSidebar />
               </nav>
             </SheetContent>
