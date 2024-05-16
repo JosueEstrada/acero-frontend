@@ -27,13 +27,14 @@ export default function Cilindro({
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(
       75,
-      ((window.innerWidth * 0.8) / window.innerHeight) * 0.6,
+      // ((window.innerWidth * 0.8) / window.innerHeight) * 0.6,
+      1, // Relación de aspecto será manejada por el contenedor padre
       0.1,
       100,
     );
     const renderer = new THREE.WebGLRenderer({ antialias: true });
-    renderer.setSize(window.innerWidth * 0.8, window.innerHeight * 0.6);
-    renderer.setClearColor(0xeecad1); // Establece el color de fondo
+    renderer.setSize(window.innerWidth * 0.43, window.innerHeight * 0.62);
+    renderer.setClearColor(0xbfe3dd); // Establece el color de fondo
     mountRef.current.appendChild(renderer.domElement);
 
     const geometry = new THREE.CylinderGeometry(
@@ -84,5 +85,10 @@ export default function Cilindro({
     }
   }, [radiusTop, radiusBottom, height]);
 
-  return <div ref={mountRef} style={{ width: "600px", height: "400px" }} />;
+  return (
+    <div
+      ref={mountRef}
+      style={{ width: "600px", height: "400px", backgroundColor: "#BFE3DD" }}
+    />
+  );
 }

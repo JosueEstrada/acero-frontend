@@ -97,9 +97,9 @@ export default function PrototipoSection() {
           <div className="flex items-center justify-center">
             <div
               ref={cilindroRef}
-              className="relative h-[400px] w-[600px] overflow-auto rounded-lg bg-gradient-to-br from-gray-100 to-gray-200 p-4 shadow-lg dark:from-gray-800 dark:to-gray-900"
+              className="relative h-[400px] w-[600px] overflow-auto rounded-lg  bg-gradient-to-br from-gray-100 to-gray-200 p-4 shadow-lg dark:from-gray-800 dark:to-gray-900"
             >
-              <div className="absolute inset-0 flex items-center justify-center">
+              <div className="absolute inset-0 mx-auto flex items-center justify-center">
                 <Cilindro
                   radiusTop={radiusTop}
                   radiusBottom={radiusBottom}
