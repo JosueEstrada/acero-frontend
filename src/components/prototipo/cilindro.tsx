@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 "use client";
 
 import { useEffect, useRef, useState } from "react";
@@ -16,9 +17,6 @@ export default function Cilindro({
   height,
 }: CilindroProps) {
   const mountRef = useRef<HTMLDivElement | null>(null);
-  // const [radiusTop, setRadiusTop] = useState(1);
-  // const [radiusBottom, setRadiusBottom] = useState(1);
-  // const [height, setHeight] = useState(2);
   const [cylinder, setCylinder] = useState<THREE.Mesh | null>(null);
 
   useEffect(() => {
@@ -27,7 +25,6 @@ export default function Cilindro({
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(
       75,
-      // ((window.innerWidth * 0.8) / window.innerHeight) * 0.6,
       1, // Relación de aspecto será manejada por el contenedor padre
       0.1,
       100,
@@ -37,17 +34,26 @@ export default function Cilindro({
     renderer.setClearColor(0xbfe3dd); // Establece el color de fondo
     mountRef.current.appendChild(renderer.domElement);
 
+    // Añadir luz ambiental
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+    scene.add(ambientLight);
+
+    // Añadir luz direccional
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+    directionalLight.position.set(5, 5, 5).normalize();
+    scene.add(directionalLight);
+
     const geometry = new THREE.CylinderGeometry(
       radiusTop,
       radiusBottom,
       height,
       32,
     );
-    const material = new THREE.MeshBasicMaterial({
-      color: 0x0077ff,
-      transparent: true,
+    const material = new THREE.MeshLambertMaterial({
+      color: 0xffffff,
       opacity: 0.5,
-      wireframe: true,
+      side: THREE.DoubleSide,
+      transparent: true,
     });
     const cylinder = new THREE.Mesh(geometry, material);
     scene.add(cylinder);
