@@ -104,9 +104,9 @@ export default function PrototipoSection() {
                   radiusTop={radiusTop}
                   radiusBottom={radiusBottom}
                   height={height}
-                  setRadiusTop={setRadiusTop}
-                  setRadiusBottom={setRadiusBottom}
-                  setHeight={setHeight}
+                  // setRadiusTop={setRadiusTop}
+                  // setRadiusBottom={setRadiusBottom}
+                  // setHeight={setHeight}
                 />
               </div>
             </div>
