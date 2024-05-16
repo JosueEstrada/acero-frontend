@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 
 import {
@@ -34,11 +35,10 @@ export default function Navbar() {
         <MailIcon className="h-4 w-4" />
         <span>info@example.com</span>
       </div>
-      <header className="sticky top-0 z-[9999] bg-background py-4 shadow-sm">
+      <header className="sticky top-0 z-[20] bg-background py-4 shadow-sm">
         <div className="container mx-auto flex items-center justify-between px-4 md:px-6">
           <Link className="flex items-center gap-2" href="/">
-            <MountainIcon className="h-6 w-6" />
-            <span className="text-lg font-bold">Solinox</span>
+            <Image src="/logo.png" width={180} height={80} alt="Solinox" />
           </Link>
           <nav className="hidden items-center gap-6 md:flex">
             <Link className="font-medium " href="/">
@@ -132,10 +132,10 @@ export default function Navbar() {
                 </Link>
                 <Accordion type="single" collapsible>
                   <AccordionItem value="item-1" className="border-none">
-                    <AccordionTrigger className="text-muted-foreground hover:text-foreground hover:no-underline">
+                    <AccordionTrigger className="py-0 text-muted-foreground hover:text-foreground hover:no-underline">
                       Servicios
                     </AccordionTrigger>
-                    <AccordionContent>
+                    <AccordionContent className="pt-4">
                       <Link href="/acero">Tanques de Acero</Link>
                     </AccordionContent>
                     <AccordionContent>
@@ -159,7 +159,7 @@ export default function Navbar() {
                 </Link>
                 <Accordion type="single" collapsible>
                   <AccordionItem value="item-1" className="border-none">
-                    <AccordionTrigger>
+                    <AccordionTrigger className="py-0">
                       <Link
                         href="/contacto"
                         className="text-muted-foreground hover:text-foreground"
@@ -168,7 +168,7 @@ export default function Navbar() {
                       </Link>
                     </AccordionTrigger>
 
-                    <AccordionContent>
+                    <AccordionContent className="py-4">
                       <Link href="/agendar-cita">Agendar cita</Link>
                     </AccordionContent>
                   </AccordionItem>
