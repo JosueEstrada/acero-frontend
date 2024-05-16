@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter as FontSans } from "next/font/google";
 
+import Footer from "@/components/footer";
 import Navbar from "@/components/navbar";
 import ThemeProvider from "@/components/theme-provider";
 
@@ -39,6 +40,7 @@ export default function RootLayout({
           <Navbar />
           {children}
         </ThemeProvider>
+        <Footer />
       </body>
     </html>
   );

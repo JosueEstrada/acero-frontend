@@ -57,18 +57,18 @@ export default function Navbar() {
               </DropdownMenuTrigger>
               <DropdownMenuContent align="start">
                 <DropdownMenuItem>
-                  <Link href="#">Tanques de Acero</Link>
+                  <Link href="/acero">Tanques de Acero</Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
-                  <Link href="#">Tanques de Fibra de Vidrio</Link>
+                  <Link href="/fibra">Tanques de Fibra de Vidrio</Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
-                  <Link href="#">
+                  <Link href="/residual">
                     Tanques para Tratamiento de Agua Residual
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
-                  <Link href="#">Más servicios</Link>
+                  <Link href="/mas-servicios">Más servicios</Link>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -132,13 +132,8 @@ export default function Navbar() {
                 </Link>
                 <Accordion type="single" collapsible>
                   <AccordionItem value="item-1" className="border-none">
-                    <AccordionTrigger>
-                      <Link
-                        href="/servicios"
-                        className="text-muted-foreground hover:text-foreground"
-                      >
-                        Servicios
-                      </Link>
+                    <AccordionTrigger className="text-muted-foreground hover:text-foreground hover:no-underline">
+                      Servicios
                     </AccordionTrigger>
                     <AccordionContent>
                       <Link href="/acero">Tanques de Acero</Link>
