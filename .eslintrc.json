@@ -1,3 +1,42 @@
 {
-  "extends": "next/core-web-vitals"
+  "extends": [
+    "airbnb",
+    "airbnb-typescript",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:prettier/recommended",
+    "prettier",
+    "next/core-web-vitals"
+  ],
+  "plugins": ["@typescript-eslint", "eslint-plugin-import-helpers"],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaVersion": 2021,
+    "sourceType": "module",
+    "project": "./tsconfig.json"
+  },
+  "ignorePatterns": ["/*.config.*"],
+  "rules": {
+    // Custom rules
+    "import/extensions": "off",
+    "import/prefer-default-export": "warn",
+    "react/react-in-jsx-scope": "off",
+    "react/jsx-filename-extension": "off",
+    "no-unused-vars": "off",
+    "no-redeclare": "off",
+    "react/jsx-props-no-spreading": "off",
+    "import-helpers/order-imports": [
+      "warn",
+      {
+        "newlinesBetween": "always",
+        "groups": [
+          ["/^next/", "module"],
+          "/^@/styles/",
+          "/^@/components/",
+          "/^@/lib/",
+          ["parent", "sibling", "index"]
+        ],
+        "alphabetize": { "order": "asc", "ignoreCase": true }
+      }
+    ]
+  }
 }
