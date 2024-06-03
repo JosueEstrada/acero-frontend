@@ -18,7 +18,7 @@ export default function ContactSection() {
           clarificadores, aireadores, sistemas de flotación por oxígeno disuelto
           (D.A.F.), desnatadores, etc.
         </p>
-        <Button className="mt-8">Contactar</Button>
+        <a href="/contacto"><Button className="mt-8">Contactar</Button></a> 
       </div>
     </section>
   );

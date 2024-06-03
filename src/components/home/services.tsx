@@ -14,6 +14,7 @@ export default function ServicesSection() {
           </p>
         </div>
         <div className="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-4">
+          <a href="/acero">
           <div className="group overflow-hidden rounded-lg border border-gray-200 transition-all hover:shadow-lg dark:border-gray-800">
             <Image
               alt="Service 1"
@@ -36,7 +37,9 @@ export default function ServicesSection() {
               </p>
             </div>
           </div>
-          <div className="group overflow-hidden rounded-lg border border-gray-200 transition-all hover:shadow-lg dark:border-gray-800">
+          </a>
+          <a href="/fibra">      
+          <div className="group overflow-hidden rounded-lg border border-gray-200 transition-all hover:shadow-lg dark:border-gray-800"> 
             <Image
               alt="Service 2"
               className="h-[200px] w-full object-cover object-center transition-all group-hover:scale-105"
@@ -47,7 +50,7 @@ export default function ServicesSection() {
                 objectFit: "cover",
               }}
               width="300"
-            />
+            /> 
             <div className="p-4">
               <h3 className="text-lg font-semibold">
                 Tanques de Fibra de Vidrio
@@ -57,7 +60,8 @@ export default function ServicesSection() {
                 Plástico Reforzado de Fibra de Vidrio PRFV
               </p>
             </div>
-          </div>
+          </div></a>
+          <a href="/residual">
           <div className="group overflow-hidden rounded-lg border border-gray-200 transition-all hover:shadow-lg dark:border-gray-800">
             <Image
               alt="Service 3"
@@ -79,7 +83,8 @@ export default function ServicesSection() {
                 residual
               </p>
             </div>
-          </div>
+          </div></a>
+          <a href="/mas-servicios">
           <div className="group overflow-hidden rounded-lg border border-gray-200 transition-all hover:shadow-lg dark:border-gray-800">
             <Image
               alt="Service 4"
@@ -99,7 +104,7 @@ export default function ServicesSection() {
                 Arenado, granallado y escoriado, etc.
               </p>
             </div>
-          </div>
+          </div></a>
         </div>
       </div>
     </section>
