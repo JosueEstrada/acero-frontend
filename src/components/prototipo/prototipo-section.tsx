@@ -56,7 +56,7 @@ export default function PrototipoSection() {
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="radius">Radio</Label>
+                  <Label htmlFor="radius">Radio superior</Label>
                   <Input
                     id="radius"
                     placeholder="Ingresa radio"
@@ -66,7 +66,7 @@ export default function PrototipoSection() {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="length">Longitud</Label>
+                  <Label htmlFor="length">Radio inferior</Label>
                   <Input
                     id="length"
                     placeholder="Ingresa longitud"
