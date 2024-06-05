@@ -1,9 +1,5 @@
-import React from "react";
-
 import CotizacionSection from "@/components/cotizacion/cotizacion";
 
-function Cotizacion() {
+export default function Cotizacion() {
   return <CotizacionSection />;
 }
-
-export default Cotizacion;

@@ -34,6 +34,13 @@ export default function Navbar() {
         <span className="mx-4">|</span>
         <MailIcon className="h-4 w-4" />
         <span>proyectos@solinoxperu.com</span>
+        <Button
+          asChild
+          variant="outline"
+          className="justify-end font-bold text-primary"
+        >
+          <Link href="/login">Acceso</Link>
+        </Button>
       </div>
       <header className="sticky top-0 z-[20] bg-background py-4 shadow-sm">
         <div className="container mx-auto flex items-center justify-between px-4 md:px-6">
