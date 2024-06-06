@@ -39,7 +39,7 @@ export default function Navbar() {
           variant="outline"
           className="justify-end font-bold text-primary"
         >
-          <Link href="/login">Acceso</Link>
+          <Link href="/acceso">Acceso</Link>
         </Button>
       </div>
       <header className="sticky top-0 z-[20] bg-background py-4 shadow-sm">

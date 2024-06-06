@@ -1,3 +1,7 @@
+"use client";
+
+import { useState } from "react";
+
 import { FileIcon, TrashIcon } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -5,6 +9,20 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 
 export default function CotizacionSection() {
+  const [selectedFile, setSelectedFile] = useState();
+
+  const handleFileInput = (e) => {
+    setSelectedFile(e.target.files[0]);
+  };
+
+  const handleFileUpload = () => {
+    const formData = new FormData();
+    formData.append("file", selectedFile);
+
+    // Aquí puedes hacer una solicitud HTTP para subir el archivo al servidor
+    // Por ejemplo, usando axios:
+    // axios.post('/upload', formData);
+  };
   return (
     <>
       <section className="w-full py-6">
@@ -43,8 +61,13 @@ export default function CotizacionSection() {
                   </div>
                 </div>
                 <div className="flex items-center space-x-4">
-                  <Button size="sm" variant="outline">
-                    Cargar
+                  <Button
+                    asChild
+                    size="sm"
+                    variant="outline"
+                    onClick={handleFileUpload}
+                  >
+                    <Input id="file1" type="file" onChange={handleFileInput} />
                   </Button>
                   <Button size="sm" variant="ghost">
                     <TrashIcon className="h-5 w-5 text-gray-500 dark:text-gray-400" />
@@ -62,8 +85,13 @@ export default function CotizacionSection() {
                   </div>
                 </div>
                 <div className="flex items-center space-x-4">
-                  <Button size="sm" variant="outline">
-                    Cargar
+                  <Button
+                    asChild
+                    size="sm"
+                    variant="outline"
+                    onClick={handleFileUpload}
+                  >
+                    <Input id="file2" type="file" onChange={handleFileInput} />
                   </Button>
                   <Button size="sm" variant="ghost">
                     <TrashIcon className="h-5 w-5 text-gray-500 dark:text-gray-400" />

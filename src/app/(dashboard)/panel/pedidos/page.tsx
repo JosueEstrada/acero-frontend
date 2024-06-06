@@ -11,13 +11,18 @@
  */
 
 /** @format */
+
 "use client";
+
+import { SelectItem } from "@radix-ui/react-select";
+import { ColumnDef } from "@tanstack/react-table";
+import React, { useState } from "react";
 
 import { DataTable } from "@/components/dashboard/DataTable";
 import PageTitle from "@/components/dashboard/PageTitle";
+import { Select, SelectContent, SelectValue } from "@/components/ui/select";
+
 import { cn } from "@/lib/utils";
-import { ColumnDef } from "@tanstack/react-table";
-import React from "react";
 
 type Props = {};
 type Payment = {
@@ -36,15 +41,24 @@ const columns: ColumnDef<Payment>[] = [
     accessorKey: "status",
     header: "Estado",
     cell: ({ row }) => {
+      const [status, setStatus] = useState(row.getValue("status"));
+
+      const handleStatusChange = (e) => {
+        setStatus(e.target.value);
+      };
       return (
         <div
-          className={cn("font-medium w-fit px-4 py-2 rounded-lg", {
+          className={cn("w-fit rounded-lg px-4 py-2 font-medium", {
             "bg-red-200": row.getValue("status") === "Pendiente",
             "bg-orange-200": row.getValue("status") === "Procesando",
             "bg-green-200": row.getValue("status") === "Completado",
           })}
         >
-          {row.getValue("status")}
+          <select value={status} onChange={handleStatusChange}>
+            <option value="Pendiente">Pendiente</option>
+            <option value="Procesando">Procesando</option>
+            <option value="Completado">Completado</option>
+          </select>
         </div>
       );
     },
@@ -154,7 +168,7 @@ const data: Payment[] = [
 
 export default function OrdersPage({}: Props) {
   return (
-    <div className="flex flex-col gap-5  w-full">
+    <div className="flex w-full flex-col  gap-5">
       <PageTitle title="Pedidos" />
       <DataTable columns={columns} data={data} />
     </div>
