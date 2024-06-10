@@ -14,8 +14,54 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 
+interface FormData {
+  date: Date | undefined;
+  hour: string;
+  name: string;
+  email: string;
+  phone: string;
+  description: string;
+}
+
 export default function AgendarCitaSection() {
   const [date, setDate] = React.useState<Date | undefined>(new Date());
+  const [hour, setHour] = React.useState<string>("");
+  const [name, setName] = React.useState<string>("");
+  const [email, setEmail] = React.useState<string>("");
+  const [phone, setPhone] = React.useState<string>("");
+  const [description, setDescription] = React.useState<string>("");
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    
+    const data: FormData = {
+      date,
+      hour,
+      name,
+      email,
+      phone,
+      description
+    };
+
+    try {
+      const response = await fetch("http://localhost:8080/citas/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (response.ok) {
+        alert("Cita agendada con éxito");
+      } else {
+        console.error("Error en el registro");
+      }
+    } catch (error) {
+      console.error("Error al enviar los datos:", error);
+    }
+  };
+
   return (
     <section className="w-full py-12 ">
       <div className="container grid grid-cols-1 gap-8 px-4 md:grid-cols-2 md:gap-12 lg:gap-16">
@@ -73,7 +119,7 @@ export default function AgendarCitaSection() {
           </div>
 
           <div className="grid grid-cols-2 gap-4">
-            <Select>
+            <Select onValueChange={(e) => setHour(e)}>
               <SelectTrigger>
                 <SelectValue placeholder="Seleccionar hora" />
               </SelectTrigger>
@@ -87,15 +133,39 @@ export default function AgendarCitaSection() {
               </SelectContent>
             </Select>
           </div>
-          <form className="space-y-4">
+          <form className="space-y-4" onSubmit={handleSubmit}>
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-              <Input placeholder="Nombre" />
-              <Input placeholder="Email" type="email" />
+              <Input 
+              id="name"
+              type="text" 
+              placeholder="Nombre" 
+              required
+              value={name} 
+              onChange={(e) => setName(e.target.value)} />
+              <Input 
+              id="email" 
+              placeholder="Email" 
+              type="email" 
+              required
+              value={email} 
+              onChange={(e) => setEmail(e.target.value)}
+              />
             </div>
-            <Input placeholder="Teléfono" type="tel" />
+            <Input
+                id="phone"
+                type="tel"
+                placeholder="Ingresa tu número de teléfono"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                required
+            />
             <Textarea
               className="min-h-[100px]"
               placeholder="Información adicional de tu proyecto"
+              id="company"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              required
             />
             <Button className="w-full" type="submit">
               Agendar cita

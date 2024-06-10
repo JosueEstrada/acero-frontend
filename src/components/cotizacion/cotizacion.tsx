@@ -1,28 +1,94 @@
 "use client";
 
-import { useState } from "react";
-
+import { ChangeEvent, useState, useEffect } from "react";
 import { FileIcon, TrashIcon } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { getSession } from "@/lib/utils";
 
 export default function CotizacionSection() {
-  const [selectedFile, setSelectedFile] = useState();
+  const [selected3DFile, setSelected3DFile] = useState<File | null>(null);
+  const [selectedPdfFile, setSelectedPdfFile] = useState<File | null>(null);
+  const [specifications, setSpecifications] = useState<string>('');
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+  const [email, setEmail] = useState<string>('');
 
-  const handleFileInput = (e) => {
-    setSelectedFile(e.target.files[0]);
+  const handle3DFileChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0] || null;
+    setSelected3DFile(file);
   };
 
-  const handleFileUpload = () => {
-    const formData = new FormData();
-    formData.append("file", selectedFile);
-
-    // Aquí puedes hacer una solicitud HTTP para subir el archivo al servidor
-    // Por ejemplo, usando axios:
-    // axios.post('/upload', formData);
+  const handlePdfFileChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0] || null;
+    setSelectedPdfFile(file);
   };
+  
+  const convertFileToBase64 = (file: any) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result?.toString().split(',')[1]); // Elimina el prefijo "data:application/octet-stream;base64,"
+      reader.onerror = (error) => reject(error);
+    });
+  };
+  
+
+  useEffect(() => {
+    const session = getSession();
+    if (session) {
+      session.userData.email && setIsLoggedIn(true);
+      setEmail(session.userData.email);
+    }
+  }, []);
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    let base64_3DFile: any = '';
+    let base64_PdfFile: any = '';
+
+    if (selected3DFile) {
+      base64_3DFile = await convertFileToBase64(selected3DFile);
+    }
+
+    if (selectedPdfFile) {
+      base64_PdfFile = await convertFileToBase64(selectedPdfFile);
+    }
+
+    const data = {
+      specifications,
+      email,
+      isLoggedIn: isLoggedIn ? 1 : 0,
+      file3D: base64_3DFile,
+      filePdf: base64_PdfFile
+    };
+
+    try {
+      if (!isLoggedIn) {
+        throw new Error("Debes iniciar sesión para hacer una cotización");
+      }
+
+      const response = await fetch("http://localhost:8080/cotizaciones/", {
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      });
+
+      if (response.ok) {
+        alert("Cotización enviada con éxito");
+      } else {
+        console.error("Error en el registro");
+      }
+    } catch (error) {
+      console.error("Error al enviar los datos:", error);
+      alert(error);
+    }
+  };
+
   return (
     <>
       <section className="w-full py-6">
@@ -41,7 +107,7 @@ export default function CotizacionSection() {
       </section>
       <section className="w-full">
         <div className="container px-4 md:px-6">
-          <div className="grid gap-6 rounded-lg border bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-950">
+          <form className="grid gap-6 rounded-lg border bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-950" onSubmit={handleSubmit}>
             <div>
               <h3 className="text-lg font-semibold">Cargar archivos</h3>
               <p className="text-sm text-gray-500 dark:text-gray-400">
@@ -65,9 +131,9 @@ export default function CotizacionSection() {
                     asChild
                     size="sm"
                     variant="outline"
-                    onClick={handleFileUpload}
+                    // onClick={handleFileUpload}
                   >
-                    <Input id="file1" type="file" onChange={handleFileInput} />
+                    <Input id="file1" type="file" onChange={handle3DFileChange} accept=".stl, .obj, .step" />
                   </Button>
                   <Button size="sm" variant="ghost">
                     <TrashIcon className="h-5 w-5 text-gray-500 dark:text-gray-400" />
@@ -89,9 +155,9 @@ export default function CotizacionSection() {
                     asChild
                     size="sm"
                     variant="outline"
-                    onClick={handleFileUpload}
+                    // onClick={handleFileUpload}
                   >
-                    <Input id="file2" type="file" onChange={handleFileInput} />
+                    <Input id="file2" type="file" onChange={handlePdfFileChange} accept=".pdf" />
                   </Button>
                   <Button size="sm" variant="ghost">
                     <TrashIcon className="h-5 w-5 text-gray-500 dark:text-gray-400" />
@@ -115,11 +181,16 @@ export default function CotizacionSection() {
                     className="w-[350px] max-w-[400px] rounded-md border border-gray-200 bg-white p-2 text-sm shadow-sm transition-colors focus:border-gray-400 focus:outline-none dark:border-gray-800 dark:bg-gray-950 dark:text-gray-400 dark:focus:border-gray-600"
                     id="tank-spec"
                     placeholder="Describa las necesidades de su tanque..."
+                    value={specifications}
+                    onChange={(e) => setSpecifications(e.target.value)}
                   />
                 </div>
               </div>
+              <Button className="w-full" type="submit">
+                  Enviar
+                </Button>
             </div>
-          </div>
+          </form>
         </div>
       </section>
       <section className="w-full py-12">
@@ -162,60 +233,64 @@ export default function CotizacionSection() {
           </div>
         </div>
       </section>
-      <section className="w-full pb-12">
-        <div className="container px-4 md:px-6">
-          <div className="rounded-lg border bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-950">
-            <h3 className="text-lg font-semibold">Crear una Cuenta</h3>
-            <form className="mt-4 grid gap-4">
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="name">Nombre</Label>
-                  <Input id="name" placeholder="Escriba su nombre" />
+      {
+        !isLoggedIn && (
+        <section className="w-full pb-12">
+          <div className="container px-4 md:px-6">
+            <div className="rounded-lg border bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-950">
+              <h3 className="text-lg font-semibold">Crear una Cuenta</h3>
+              <form className="mt-4 grid gap-4">
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="name">Nombre</Label>
+                    <Input id="name" placeholder="Escriba su nombre" />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="email">Email</Label>
+                    <Input
+                      id="email"
+                      placeholder="Escriba su email"
+                      type="email"
+                    />
+                  </div>
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="phone">Teléfono</Label>
+                    <Input
+                      id="phone"
+                      placeholder="Escriba su número de teléfono"
+                      type="tel"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="password">Contraseña</Label>
+                    <Input
+                      id="password"
+                      placeholder="Escriba una contraseña"
+                      type="password"
+                    />
+                  </div>
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="email">Email</Label>
+                  <Label htmlFor="company">Empresa</Label>
                   <Input
-                    id="email"
-                    placeholder="Escriba su email"
-                    type="email"
+                    id="company"
+                    placeholder="Escriba el nombre de su compañía"
                   />
                 </div>
-              </div>
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="phone">Teléfono</Label>
-                  <Input
-                    id="phone"
-                    placeholder="Escriba su número de teléfono"
-                    type="tel"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="password">Contraseña</Label>
-                  <Input
-                    id="password"
-                    placeholder="Escriba una contraseña"
-                    type="password"
-                  />
-                </div>
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="company">Empresa</Label>
-                <Input
-                  id="company"
-                  placeholder="Escriba el nombre de su compañía"
-                />
-              </div>
-              <Button className="w-full" type="submit">
-                Crear cuenta y solicitar cotización...
-              </Button>
-              <Button className="w-full" type="submit" variant="outline">
-                Ya tengo una cuenta, iniciar sesión...
-              </Button>
-            </form>
+                <Button className="w-full" type="submit">
+                  Crear cuenta y solicitar cotización...
+                </Button>
+                <Button className="w-full" type="submit" variant="outline">
+                  Ya tengo una cuenta, iniciar sesión...
+                </Button>
+              </form>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+        ) 
+      }
     </>
   );
 }

@@ -11,15 +11,18 @@ import {
   SquareMousePointer,
   UsersRound,
 } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import { Nav } from "@/components/dashboard/Nav";
 import { Button } from "@/components/ui/button";
+import { getSession } from "@/lib/utils";
 
-type Props = {};
+type Props = {role: string};
 
-export default function SideNavbar({}: Props) {
+export default function SideNavbar() {
+  //console.log("sidenavbar: "+role)
   const [isCollapsed, setIsCollapsed] = useState(false);
+  const [isAdmin, setIsAdmin] = useState<boolean>(true);
 
   const onlyWidth = useWindowWidth();
   const mobileWidth = onlyWidth < 768;
@@ -27,6 +30,15 @@ export default function SideNavbar({}: Props) {
   function toggleSidebar() {
     setIsCollapsed(!isCollapsed);
   }
+
+  useEffect(()=>{
+    const session = getSession();
+    if(session.userData.nombrePerfil === "administrador"){
+      setIsAdmin(true)
+    }else{
+      setIsAdmin(false)
+    }
+  }, [])
 
   return (
     <div className="relative min-w-[80px] border-r px-3  pb-10 pt-24 ">
@@ -43,9 +55,9 @@ export default function SideNavbar({}: Props) {
       )}
       <Nav
         isCollapsed={mobileWidth ? true : isCollapsed}
-        links={[
+        links={isAdmin ? [
           {
-            title: "Tablero",
+            title: "Citas",
             href: "/panel",
             icon: LayoutDashboard,
             variant: "default",
@@ -55,26 +67,47 @@ export default function SideNavbar({}: Props) {
             href: "/panel/usuarios",
             icon: UsersRound,
             variant: "ghost",
-          },
+          }
+        ] : [
           {
-            title: "Pedidos",
-            href: "/panel/pedidos",
-            icon: ShoppingCart,
+            title: "Mis cotizaciones",
+            href: "/panel/usuarios",
+            icon: UsersRound,
             variant: "ghost",
-          },
-          {
-            title: "Ajustes",
-            href: "/panel/ajustes",
-            icon: Settings,
-            variant: "ghost",
-          },
-          {
-            title: "Regresar web",
-            href: "/",
-            icon: SquareMousePointer,
-            variant: "ghost",
-          },
+          }
         ]}
+        // links={[
+        //   {
+        //     title: "Citas",
+        //     href: "/panel",
+        //     icon: LayoutDashboard,
+        //     variant: "default",
+        //   },
+        //   {
+        //     title: "Cotizaciones",
+        //     href: "/panel/usuarios",
+        //     icon: UsersRound,
+        //     variant: "ghost",
+        //   },
+        //   // {
+        //   //   title: "Pedidos",
+        //   //   href: "/panel/pedidos",
+        //   //   icon: ShoppingCart,
+        //   //   variant: "ghost",
+        //   // },
+        //   // {
+        //   //   title: "Ajustes",
+        //   //   href: "/panel/ajustes",
+        //   //   icon: Settings,
+        //   //   variant: "ghost",
+        //   // },
+        //   // {
+        //   //   title: "Regresar web",
+        //   //   href: "/",
+        //   //   icon: SquareMousePointer,
+        //   //   variant: "ghost",
+        //   // },
+        // ]}
       />
     </div>
   );

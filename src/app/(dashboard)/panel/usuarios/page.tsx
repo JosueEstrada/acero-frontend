@@ -9,8 +9,19 @@
 
 import { DataTable } from "@/components/dashboard/DataTable";
 import PageTitle from "@/components/dashboard/PageTitle";
+import { getSession } from "@/lib/utils";
 import { ColumnDef } from "@tanstack/react-table";
-import React from "react";
+import React, { useEffect, useState } from "react";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Button } from "@/components/ui/button";
+import QuoteItem from "@/components/dashboard/QuotesTable";
 
 type Props = {};
 type Payment = {
@@ -42,6 +53,13 @@ const columns: ColumnDef<Payment>[] = [
   {
     accessorKey: "email",
     header: "Email",
+    cell: ({ row }) => {
+      return (
+        <div className="flex gap-2 items-center">
+          {row.getValue('usuario.email')}
+        </div>
+      );
+    },
   },
   {
     accessorKey: "lastOrder",
@@ -53,104 +71,84 @@ const columns: ColumnDef<Payment>[] = [
   },
 ];
 
-const data: Payment[] = [
+
+
+/* NUEVO CÓDIGO */
+interface Quote {
+  email: string;
+  // selected3DFile: File | null;
+  // selectedPdfFile: File | null;
+  specifications: string;
+}
+
+const quoteColumns: ColumnDef<Quote>[] = [
   {
-    name: "John Doe",
-    email: "john@example.com",
-    lastOrder: "2024-01-01",
-    method: "Tarjeta de crédito",
+    accessorKey: "email",
+    header: "Email",
   },
+  // {
+  //   accessorKey: "selected3DFile",
+  //   header: "Archivo 3D"
+  // },
+  // {
+  //   accessorKey: "selectedPdfFile",
+  //   header: "Archivo PDF"
+  // },
   {
-    name: "Alice Smith",
-    email: "alice@example.com",
-    lastOrder: "2024-02-15",
-    method: "Yape",
-  },
-  {
-    name: "Bob Johnson",
-    email: "bob@example.com",
-    lastOrder: "2024-03-20",
-    method: "Plim",
-  },
-  {
-    name: "Emma Brown",
-    email: "emma@example.com",
-    lastOrder: "2024-04-10",
-    method: "Tarjeta de crédito",
-  },
-  {
-    name: "Michael Davis",
-    email: "michael@example.com",
-    lastOrder: "2024-05-05",
-    method: "Transferencia bancaria",
-  },
-  {
-    name: "Sophia Wilson",
-    email: "sophia@example.com",
-    lastOrder: "2024-06-18",
-    method: "Transferencia bancaria",
-  },
-  {
-    name: "Liam Garcia",
-    email: "liam@example.com",
-    lastOrder: "2024-07-22",
-    method: "Yape",
-  },
-  {
-    name: "Olivia Martinez",
-    email: "olivia@example.com",
-    lastOrder: "2024-08-30",
-    method: "Transferencia bancaria",
-  },
-  {
-    name: "Noah Rodriguez",
-    email: "noah@example.com",
-    lastOrder: "2024-09-12",
-    method: "Yape",
-  },
-  {
-    name: "Ava Lopez",
-    email: "ava@example.com",
-    lastOrder: "2024-10-25",
-    method: "Yape",
-  },
-  {
-    name: "Elijah Hernandez",
-    email: "elijah@example.com",
-    lastOrder: "2024-11-05",
-    method: "Plim",
-  },
-  {
-    name: "Mia Gonzalez",
-    email: "mia@example.com",
-    lastOrder: "2024-12-08",
-    method: "Yape",
-  },
-  {
-    name: "James Perez",
-    email: "james@example.com",
-    lastOrder: "2024-01-18",
-    method: "Yape",
-  },
-  {
-    name: "Charlotte Carter",
-    email: "charlotte@example.com",
-    lastOrder: "2024-02-22",
-    method: "Tarjeta de crédito",
-  },
-  {
-    name: "Benjamin Taylor",
-    email: "benjamin@example.com",
-    lastOrder: "2024-03-30",
-    method: "Tarjeta de crédito",
-  },
+    accessorKey: "specifications",
+    header: "Especificaciones"
+  }
 ];
 
+
 export default function UsersPage({}: Props) {
+
+  const [quotes, setQuotes] = useState<Array<any>>([]);
+  const session = getSession();
+  useEffect(() => {
+    const getQuotesData = async () => {
+
+      try {
+        const response = await fetch(`http://localhost:8080/panel/${session && session.userData.email}`);
+  
+        if (!response.ok) {
+          throw {
+            status: response.status, statusText: response.statusText
+          }
+        }
+  
+        const data = await response.json();
+        setQuotes(data.cotizaciones);
+      } catch (error: any) {
+        console.error("Error al enviar los datos:", error.statusText);
+      }
+    };
+    getQuotesData();
+  }, [])
+
   return (
     <div className="flex flex-col gap-5  w-full">
-      <PageTitle title="Usuarios" />
-      <DataTable columns={columns} data={data} />
+      <PageTitle title="Cotizaciones" />
+      {/* <DataTable columns={quoteColumns} data={quotes} /> */}
+    <div>
+      <div className="rounded-md border">
+        <Table>
+          <TableHeader>
+          <TableRow>
+            <TableHead>Email</TableHead>
+            <TableHead>Archivo 3D</TableHead>
+            <TableHead>Archivo Pdf</TableHead>
+            <TableHead>Especificaciones</TableHead>
+          </TableRow>
+          </TableHeader>
+          <TableBody>
+                {quotes.map((item, index) => (
+                  <QuoteItem key={index} quote={item} />
+                ))}
+          </TableBody>
+        </Table>
+      </div>
+    </div>
     </div>
   );
 }

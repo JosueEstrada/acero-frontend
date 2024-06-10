@@ -1,9 +1,11 @@
+"use client";
 import "@/app/globals.css";
 import { Inter } from "next/font/google";
 
 import SideNavbar from "@/components/dashboard/SideNavbar";
 
-import { cn } from "@/lib/utils";
+import { cn, getSession } from "@/lib/utils";
+import { useEffect, useState } from "react";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -12,6 +14,16 @@ export default function DashboardLayout({
 }: {
   children: React.ReactNode;
 }) {
+
+  const [role, setRole] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
+  
+  useEffect(() => {
+    const session = getSession();
+    console.log("asdfs" , session.userData.nombrePerfil)
+    setRole(session.userData.nombrePerfil)
+  }, [])
+
   return (
     <html lang="en">
       <body
