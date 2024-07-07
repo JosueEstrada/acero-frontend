@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useForm, SubmitHandler } from "react-hook-form";
 
 interface FormData {
   name: string;
@@ -24,17 +25,39 @@ export default function RegistroPage() {
   const [company, setCompany] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const router = useRouter();
+  const { register, handleSubmit, formState: { errors } } = useForm<FormData>();
+  // const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+  //   event.preventDefault();
+  //   const data: FormData = {
+  //     name,
+  //     email,
+  //     phone,
+  //     company,
+  //     password,
+  //   };
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const data: FormData = {
-      name,
-      email,
-      phone,
-      company,
-      password,
-    };
+  //   try {
+  //     const response = await fetch("http://localhost:8080/usuarios/", {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify(data),
+  //     });
 
+  //     if (response.ok) {
+  //       //router.push("/acceso");
+  //       localStorage.setItem('alertMessage', 'Registro creado correctamente');
+  //       router.push("/");
+  //     } else {
+  //       console.error("Error en el registro");
+  //     }
+  //   } catch (error) {
+  //     console.error("Error al enviar los datos:", error);
+  //   }
+  // };
+
+  const onSubmit: SubmitHandler<FormData> = async (data) => {
     try {
       const response = await fetch("http://localhost:8080/usuarios/", {
         method: "POST",
@@ -45,7 +68,6 @@ export default function RegistroPage() {
       });
 
       if (response.ok) {
-        //router.push("/acceso");
         localStorage.setItem('alertMessage', 'Registro creado correctamente');
         router.push("/");
       } else {
@@ -59,7 +81,8 @@ export default function RegistroPage() {
   return (
     <div className="w-full lg:grid lg:min-h-[600px] lg:grid-cols-2 xl:min-h-[800px]">
       <div className="flex items-center justify-center py-12">
-        <form className="mx-auto grid w-[350px] gap-6" onSubmit={handleSubmit}>
+        {/* <form className="mx-auto grid w-[350px] gap-6" onSubmit={handleSubmit}> */}
+        <form className="mx-auto grid w-[350px] gap-6" onSubmit={handleSubmit(onSubmit)}>
           <div className="grid gap-2 text-center">
             <h1 className="text-3xl font-bold">Registrarme</h1>
             <p className="text-balance text-muted-foreground">
@@ -73,10 +96,12 @@ export default function RegistroPage() {
                 id="name"
                 type="text"
                 placeholder="Ingresa tu nombre"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                required
+                {...register("name", { required: "El nombre es requerido" })}
+                // value={name}
+                // onChange={(e) => setName(e.target.value)}
+                // required
               />
+               {errors.name && <p className="text-red-500">{errors.name.message}</p>}
             </div>
             <div className="grid gap-2">
               <Label htmlFor="email">Correo Electrónico</Label>
@@ -84,10 +109,18 @@ export default function RegistroPage() {
                 id="email"
                 type="email"
                 placeholder="m@ejemplo.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
+                {...register("email", { 
+                  required: "El correo electrónico es requerido", 
+                  pattern: {
+                    value: /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/,
+                    message: "El formato del correo electrónico no es válido"
+                  }
+                })}
+                // value={email}
+                // onChange={(e) => setEmail(e.target.value)}
+                // required
               />
+              {errors.email && <p className="text-red-500">{errors.email.message}</p>}
             </div>
             <div className="grid gap-2">
               <Label htmlFor="phone">Teléfono</Label>
@@ -95,10 +128,18 @@ export default function RegistroPage() {
                 id="phone"
                 type="tel"
                 placeholder="Ingresa tu número de teléfono"
-                value={phone}
-                onChange={(e) => setPhone(e.target.value)}
-                required
+                {...register("phone", { 
+                  required: "El teléfono es requerido", 
+                  pattern: {
+                    value: /^[0-9]{9}$/,
+                    message: "El teléfono debe tener exactamente 9 dígitos"
+                  }
+                })}
+                // value={phone}
+                // onChange={(e) => setPhone(e.target.value)}
+                // required
               />
+              {errors.phone && <p className="text-red-500">{errors.phone.message}</p>}
             </div>
             <div className="grid gap-2">
               <Label htmlFor="company">Empresa</Label>
@@ -106,10 +147,12 @@ export default function RegistroPage() {
                 id="company"
                 type="text"
                 placeholder="Ingresa el nombre de tu Empresa"
-                value={company}
-                onChange={(e) => setCompany(e.target.value)}
-                required
+                {...register("company", { required: "La empresa es requerida" })}
+                // value={company}
+                // onChange={(e) => setCompany(e.target.value)}
+                // required
               />
+               {errors.company && <p className="text-red-500">{errors.company.message}</p>}
             </div>
             <div className="grid gap-2">
               <div className="flex items-center">
@@ -118,10 +161,13 @@ export default function RegistroPage() {
               <Input
                 id="password"
                 type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
+                placeholder="Ingrese tu contraseña"
+                {...register("password", { required: "La contraseña es requerida" })}
+                // value={password}
+                // onChange={(e) => setPassword(e.target.value)}
+                // required
               />
+              {errors.password && <p className="text-red-500">{errors.password.message}</p>}
             </div>
             <Button type="submit" className="w-full">
               Registrarme

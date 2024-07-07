@@ -15,6 +15,7 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { useRouter } from "next/navigation";
 import toast, { Toaster } from 'react-hot-toast';
+import { useForm, SubmitHandler } from "react-hook-form";
 
 interface FormData {
   date: Date | undefined;
@@ -33,16 +34,44 @@ export default function AgendarCitaSection() {
   const [phone, setPhone] = React.useState<string>("");
   const [description, setDescription] = React.useState<string>("");
   const router = useRouter();
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+  const { register, handleSubmit, setValue, formState: { errors } } = useForm<FormData>();
+  // const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+  //   event.preventDefault();
     
-    const data: FormData = {
+  //   const data: FormData = {
+  //     date,
+  //     hour,
+  //     name,
+  //     email,
+  //     phone,
+  //     description
+  //   };
+
+  //   try {
+  //     const response = await fetch("http://localhost:8080/citas/", {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify(data),
+  //     });
+
+  //     if (response.ok) {
+  //       // alert("Cita agendada con éxito");
+  //       localStorage.setItem('alertMessage', 'Cita agendada con éxito');
+  //       router.push("/");
+  //     } else {
+  //       toast.error('Ups, sucedió un error');
+  //     }
+  //   } catch (error) {
+  //     toast.error('Ups, sucedió un error: ' +error);
+  //   }
+  // };
+
+  const onSubmit: SubmitHandler<FormData> = async (data) => {
+    const payload = {
+      ...data,
       date,
-      hour,
-      name,
-      email,
-      phone,
-      description
     };
 
     try {
@@ -51,18 +80,17 @@ export default function AgendarCitaSection() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify(payload),
       });
 
       if (response.ok) {
-        // alert("Cita agendada con éxito");
         localStorage.setItem('alertMessage', 'Cita agendada con éxito');
         router.push("/");
       } else {
         toast.error('Ups, sucedió un error');
       }
     } catch (error) {
-      toast.error('Ups, sucedió un error: ' +error);
+      toast.error('Ups, sucedió un error');
     }
   };
 
@@ -112,6 +140,7 @@ export default function AgendarCitaSection() {
           </div>
         </div>
         <div className="space-y-4">
+        <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
           <div className="mx-auto text-center">
             <p>Seleccionar fecha</p>
             <div className="flex justify-center">
@@ -125,7 +154,9 @@ export default function AgendarCitaSection() {
           </div>
 
           <div className="grid grid-cols-2 gap-4">
-            <Select onValueChange={(e) => setHour(e)}>
+            {/* <Select onValueChange={(e) => setHour(e)}> */}
+            <Select onValueChange={(value) => setValue("hour", value)}>
+
               <SelectTrigger>
                 <SelectValue placeholder="Seleccionar hora" />
               </SelectTrigger>
@@ -138,41 +169,59 @@ export default function AgendarCitaSection() {
                 <SelectItem value="15:00">3:00 PM</SelectItem>
               </SelectContent>
             </Select>
+            {errors.hour && <p className="text-red-500">{errors.hour.message}</p>}
           </div>
-          <form className="space-y-4" onSubmit={handleSubmit}>
+          {/* <form className="space-y-4" onSubmit={handleSubmit}> */}
+
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <Input 
               id="name"
               type="text" 
               placeholder="Nombre" 
-              required
-              value={name} 
-              onChange={(e) => setName(e.target.value)} />
+              {...register("name", { required: "El nombre es requerido" })}
+              // required
+              // value={name} 
+              // onChange={(e) => setName(e.target.value)}
+              />
+               {errors.name && <p className="text-red-500">{errors.name.message}</p>}
               <Input 
               id="email" 
               placeholder="Email" 
               type="email" 
-              required
-              value={email} 
-              onChange={(e) => setEmail(e.target.value)}
+              {...register("email", { required: "El email es requerido", pattern: { value: /^\S+@\S+$/i, message: "Formato de email inválido" } })}
+              // required
+              // value={email} 
+              // onChange={(e) => setEmail(e.target.value)}
               />
+              {errors.email && <p className="text-red-500">{errors.email.message}</p>}
             </div>
             <Input
                 id="phone"
                 type="tel"
                 placeholder="Ingresa tu número de teléfono"
-                value={phone}
-                onChange={(e) => setPhone(e.target.value)}
-                required
+                {...register("phone", {
+                  required: "El teléfono es requerido",
+                  pattern: {
+                    value: /^\d{9}$/,
+                    message: "El teléfono debe tener exactamente 9 dígitos",
+                  },
+                })}
+                // value={phone}
+                // onChange={(e) => setPhone(e.target.value)}
+                // required
             />
+            {errors.phone && <p className="text-red-500">{errors.phone.message}</p>}
             <Textarea
               className="min-h-[100px]"
               placeholder="Información adicional de tu proyecto"
-              id="company"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              required
+              // id="company"
+              id="description"
+              {...register("description", { required: "La descripción es requerida" })}
+              // value={description}
+              // onChange={(e) => setDescription(e.target.value)}
+              // required
             />
+            {errors.description && <p className="text-red-500">{errors.description.message}</p>}
             <Button className="w-full" type="submit">
               Agendar cita
             </Button>
