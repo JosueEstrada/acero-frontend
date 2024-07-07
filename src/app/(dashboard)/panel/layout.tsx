@@ -20,8 +20,7 @@ export default function DashboardLayout({
   
   useEffect(() => {
     const session = getSession();
-    console.log("asdfs" , session.userData.nombrePerfil)
-    setRole(session.userData.nombrePerfil)
+    setRole(session.userData?.nombrePerfil)
   }, [])
 
   return (

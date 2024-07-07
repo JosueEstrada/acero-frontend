@@ -33,7 +33,7 @@ export default function SideNavbar() {
 
   useEffect(()=>{
     const session = getSession();
-    if(session.userData.nombrePerfil === "administrador"){
+    if(session.userData?.nombrePerfil === "administrador"){
       setIsAdmin(true)
     }else{
       setIsAdmin(false)
@@ -55,7 +55,41 @@ export default function SideNavbar() {
       )}
       <Nav
         isCollapsed={mobileWidth ? true : isCollapsed}
-        links={isAdmin ? [
+        // links={isAdmin ? [
+        //   {
+        //     title: "Citas",
+        //     href: "/panel",
+        //     icon: LayoutDashboard,
+        //     variant: "default",
+        //   },
+        //   {
+        //     title: "Usuarios",
+        //     href: "/panel/usuarios",
+        //     icon: UsersRound,
+        //     variant: "ghost",
+        //   },
+        //   {
+        //     title: "Perfil",
+        //     href: "/panel/perfil",
+        //     icon: UsersRound,
+        //     variant: "ghost",
+        //   }
+        // ] : [
+        //   {
+        //     title: "Mis cotizaciones",
+        //     href: "/panel/usuarios",
+        //     icon: UsersRound,
+        //     variant: "ghost",
+        //   },
+        //   {
+        //     title: "Perfil",
+        //     href: "/panel/perfil",
+        //     icon: UsersRound,
+        //     variant: "ghost",
+        //   }
+        // ]}
+
+        links={[
           {
             title: "Citas",
             href: "/panel",
@@ -63,19 +97,22 @@ export default function SideNavbar() {
             variant: "default",
           },
           {
-            title: "Usuarios",
-            href: "/panel/usuarios",
+            title: "Cotizaciones",
+            href: "/panel/cotizaciones",
             icon: UsersRound,
             variant: "ghost",
-          }
-        ] : [
+          },
           {
-            title: "Mis cotizaciones",
-            href: "/panel/usuarios",
+            title: "Perfil",
+            href: "/panel/perfil",
             icon: UsersRound,
             variant: "ghost",
           }
         ]}
+
+
+
+
         // links={[
         //   {
         //     title: "Citas",

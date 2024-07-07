@@ -1,6 +1,8 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
-
+import { getSession } from "@/lib/utils";
 import {
   ChevronDownIcon,
   MailIcon,
@@ -24,8 +26,15 @@ import {
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 
 import { ModeToggle, ModeToggleSidebar } from "./theme-toggle-button";
+import { useEffect, useState } from "react";
 
 export default function Navbar() {
+
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+  useEffect(()=>{
+    const session = getSession();
+    session?.isLoggedIn && setIsLoggedIn(session.isLoggedIn);
+  }, [])
   return (
     <>
       <div className="flex items-center justify-center gap-2 bg-primary py-2 text-sm text-white dark:bg-primary/50">
@@ -41,6 +50,17 @@ export default function Navbar() {
         >
           <Link href="/acceso">Acceso</Link>
         </Button>
+        {
+          isLoggedIn && (
+            <Button
+              asChild
+              variant="outline"
+              className="justify-end font-bold text-primary"
+            >
+              <Link href="/panel">Usuario logueado</Link>
+            </Button>
+          )
+        }
       </div>
       <header className="sticky top-0 z-[20] bg-background py-4 shadow-sm">
         <div className="container mx-auto flex items-center justify-between px-4 md:px-6">
