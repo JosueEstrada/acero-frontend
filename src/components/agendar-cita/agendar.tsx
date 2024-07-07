@@ -69,28 +69,57 @@ export default function AgendarCitaSection() {
   // };
 
   const onSubmit: SubmitHandler<FormData> = async (data) => {
-    const payload = {
-      ...data,
+    let existeCita : boolean = false;
+    const dataToExisteCita = {
       date,
-    };
+      hour: data.hour
+    }
 
     try {
-      const response = await fetch("http://localhost:8080/citas/", {
+      const response = await fetch("http://localhost:8080/citas/existe-cita", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(payload),
+        body: JSON.stringify(dataToExisteCita),
       });
 
       if (response.ok) {
-        localStorage.setItem('alertMessage', 'Cita agendada con éxito');
-        router.push("/");
+        existeCita = await response.json();
       } else {
         toast.error('Ups, sucedió un error');
       }
     } catch (error) {
       toast.error('Ups, sucedió un error');
+    }
+
+    if(!existeCita){
+      /* AGENDAR CITA */
+      const payload = {
+        ...data,
+        date,
+      };
+  
+      try {
+        const response = await fetch("http://localhost:8080/citas/", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(payload),
+        });
+  
+        if (response.ok) {
+          localStorage.setItem('alertMessage', 'Cita agendada con éxito');
+          router.push("/");
+        } else {
+          toast.error('Ups, sucedió un error');
+        }
+      } catch (error) {
+        toast.error('Ups, sucedió un error');
+      }
+    }else{
+      toast.error('Cita ya existe');
     }
   };
 

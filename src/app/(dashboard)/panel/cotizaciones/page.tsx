@@ -118,7 +118,7 @@ export default function UsersPage({}: Props) {
         }
   
         const data = await response.json();
-        setQuotes(data.cotizaciones);
+        data.cotizaciones && setQuotes(data.cotizaciones);
       } catch (error: any) {
         console.error("Error al enviar los datos:", error.statusText);
       }

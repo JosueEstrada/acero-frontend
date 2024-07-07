@@ -8,39 +8,74 @@ import { getSession } from "@/lib/utils";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useForm, SubmitHandler } from "react-hook-form";
+import { useEffect } from "react";
+import {toast, Toaster} from "react-hot-toast";
 
 interface FormDataUpdateProfile {
   name: string;
   email: string;
   phone: string;
   company: string;
-  password: string;
 }
 
 export default function PerfilPage() {
-  const { register, handleSubmit, formState: { errors } } = useForm<FormDataUpdateProfile>();
+  const { register, handleSubmit, setValue, formState: { errors } } = useForm<FormDataUpdateProfile>();
+
+     // Obtener datos del local storage y establecerlos en el formulario
+     const storedUser: any = JSON.parse(localStorage.getItem("user") as string);
+     useEffect(() => {
+  
+      if (storedUser) {
+        const { name, email, phone, company } = storedUser;
+        setValue("name", name);
+        setValue("email", email);
+        setValue("phone", phone);
+        setValue("company", company);
+      }
+    }, [setValue]);
+
   const onSubmitUpdateProfile: SubmitHandler<FormDataUpdateProfile> = async (data) => {
     try {
-      const response = await fetch("http://localhost:8080/usuarios/", {
-        method: "POST",
+      const response = await fetch(`http://localhost:8080/usuarios/${storedUser.email}`, {
+        method: "PUT",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify({
+          ...data,
+          idPerfil: storedUser.idPerfil
+        }),
       });
 
       if (response.ok) {
+        const data = await response.json();
+        console.log(data);
+        localStorage.setItem('user', JSON.stringify({
+          company: data.company,
+          email: data.email,
+          idPerfil: data.perfil.id,
+          name: data.name,
+          nombrePerfil: data.perfil.name,
+          password: null,
+          phone: data.phone
+        }));
+
         // localStorage.setItem('alertMessage', 'Registro creado correctamente');
         // router.push("/");
+        toast.success("Perfil actualizada correctamente");
       } else {
-        console.error("Error en el registro");
+        toast.error("Error al actualizar el perfil");
       }
     } catch (error) {
-      console.error("Error al enviar los datos:", error);
+      toast.error("Error al actualizar el perfil");
     }
   };
 
+
+
   return (
+    <>
+    <Toaster />
     <div className="flex flex-col gap-5  w-full">
       <PageTitle title="Perfil" />
     <div>
@@ -71,7 +106,8 @@ export default function PerfilPage() {
                   pattern: {
                     value: /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/,
                     message: "El formato del correo electrónico no es válido"
-                  }
+                  },
+                  disabled: true
                 })}
               />
               {errors.email && <p className="text-red-500">{errors.email.message}</p>}
@@ -110,5 +146,6 @@ export default function PerfilPage() {
       </div>
     </div>
     </div>
+    </>
   );
 }

@@ -31,9 +31,11 @@ import { useEffect, useState } from "react";
 export default function Navbar() {
 
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+  const [userData, setUserData] = useState<any>(null);
   useEffect(()=>{
     const session = getSession();
     session?.isLoggedIn && setIsLoggedIn(session.isLoggedIn);
+    session?.userData && setUserData(session.userData);
   }, [])
   return (
     <>
@@ -57,7 +59,7 @@ export default function Navbar() {
               variant="outline"
               className="justify-end font-bold text-primary"
             >
-              <Link href="/panel">Usuario logueado</Link>
+              <Link href="/panel">{userData && userData.email}</Link>
             </Button>
           )
         }

@@ -151,7 +151,7 @@ export default function Home() {
   
         const data = await response.json();
         console.log(data);
-        setAppointments(data.citas);
+        data.citas && setAppointments(data.citas);
         //setQuotes(data.quotes);
       } catch (error: any) {
         console.error("Error al enviar los datos:", error.statusText);
