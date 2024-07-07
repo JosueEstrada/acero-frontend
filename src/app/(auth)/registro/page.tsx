@@ -27,7 +27,6 @@ export default function RegistroPage() {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    
     const data: FormData = {
       name,
       email,
@@ -46,7 +45,9 @@ export default function RegistroPage() {
       });
 
       if (response.ok) {
-        router.push("/acceso");
+        //router.push("/acceso");
+        localStorage.setItem('alertMessage', 'Registro creado correctamente');
+        router.push("/");
       } else {
         console.error("Error en el registro");
       }

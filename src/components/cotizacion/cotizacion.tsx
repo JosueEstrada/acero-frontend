@@ -7,13 +7,15 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { getSession } from "@/lib/utils";
-
+import { useRouter } from "next/navigation";
+import toast, { Toaster } from 'react-hot-toast';
 export default function CotizacionSection() {
   const [selected3DFile, setSelected3DFile] = useState<File | null>(null);
   const [selectedPdfFile, setSelectedPdfFile] = useState<File | null>(null);
   const [specifications, setSpecifications] = useState<string>('');
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [email, setEmail] = useState<string>('');
+  const router = useRouter();
 
   const handle3DFileChange = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0] || null;
@@ -38,8 +40,8 @@ export default function CotizacionSection() {
   useEffect(() => {
     const session = getSession();
     if (session) {
-      session.userData.email && setIsLoggedIn(true);
-      setEmail(session.userData.email);
+      session.userData?.email && setIsLoggedIn(true);
+      setEmail(session.userData?.email);
     }
   }, []);
 
@@ -79,18 +81,20 @@ export default function CotizacionSection() {
       });
 
       if (response.ok) {
-        alert("Cotización enviada con éxito");
+        // alert("Cotización enviada con éxito");
+        localStorage.setItem('alertMessage', 'Cotización enviada con éxito');
+        router.push("/");
       } else {
-        console.error("Error en el registro");
+        toast.error('Ups, sucedió un error');
       }
     } catch (error) {
-      console.error("Error al enviar los datos:", error);
-      alert(error);
+      toast.error('Ups, sucedió un error: ' +error);
     }
   };
 
   return (
     <>
+    <Toaster />
       <section className="w-full py-6">
         <div className="container px-4 md:px-6">
           <div className="space-y-4 text-center">

@@ -39,11 +39,12 @@ export default function AccesoPage() {
       if (response.ok) {
         const userData = await response.json();
         localStorage.setItem('user', JSON.stringify(userData));
-        if(userData.nombrePerfil === "administrador"){
-          router.push("/panel");
-        }else{
-          router.push("/panel/usuarios")
-        }
+        // if(userData.nombrePerfil === "administrador"){
+        //   router.push("/panel");
+        // }else{
+        //   router.push("/panel/usuarios")
+        // }
+        router.push("/");
       } else {
         console.error("Error en el acceso");
       }
@@ -97,9 +98,9 @@ export default function AccesoPage() {
             <Button type="submit" className="w-full">
               Iniciar Sesión
             </Button>
-            <Button variant="outline" className="w-full">
+            {/* <Button variant="outline" className="w-full">
               Iniciar Sesión con Google
-            </Button>
+            </Button>  */}
           </div>
           <div className="mt-4 text-center text-sm">
             ¿No tienes una cuenta?{" "}

@@ -13,6 +13,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { useRouter } from "next/navigation";
+import toast, { Toaster } from 'react-hot-toast';
 
 interface FormData {
   date: Date | undefined;
@@ -30,7 +32,7 @@ export default function AgendarCitaSection() {
   const [email, setEmail] = React.useState<string>("");
   const [phone, setPhone] = React.useState<string>("");
   const [description, setDescription] = React.useState<string>("");
-
+  const router = useRouter();
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     
@@ -53,16 +55,20 @@ export default function AgendarCitaSection() {
       });
 
       if (response.ok) {
-        alert("Cita agendada con éxito");
+        // alert("Cita agendada con éxito");
+        localStorage.setItem('alertMessage', 'Cita agendada con éxito');
+        router.push("/");
       } else {
-        console.error("Error en el registro");
+        toast.error('Ups, sucedió un error');
       }
     } catch (error) {
-      console.error("Error al enviar los datos:", error);
+      toast.error('Ups, sucedió un error: ' +error);
     }
   };
 
   return (
+    <>
+    <Toaster />
     <section className="w-full py-12 ">
       <div className="container grid grid-cols-1 gap-8 px-4 md:grid-cols-2 md:gap-12 lg:gap-16">
         <div className="space-y-4">
@@ -174,5 +180,6 @@ export default function AgendarCitaSection() {
         </div>
       </div>
     </section>
+    </>
   );
 }
