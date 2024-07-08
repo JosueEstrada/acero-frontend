@@ -31,6 +31,12 @@ export default function SideNavbar() {
     setIsCollapsed(!isCollapsed);
   }
 
+  const logoutSession = () => {
+    const session = getSession();
+    localStorage.removeItem('user')
+    window.location.href = "/";
+  }
+
   useEffect(()=>{
     const session = getSession();
     if(session.userData?.nombrePerfil === "administrador"){
@@ -146,6 +152,16 @@ export default function SideNavbar() {
         //   // },
         // ]}
       />
+      <div className="w-full h-[80%]">
+
+      </div>
+      <Button
+            onClick={logoutSession}
+            variant="secondary"
+            className="p-2 w-full"
+          >
+            Cerrar sesión
+      </Button>
     </div>
   );
 }

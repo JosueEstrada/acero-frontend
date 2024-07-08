@@ -172,9 +172,9 @@ export default function RegistroPage() {
             <Button type="submit" className="w-full">
               Registrarme
             </Button>
-            <Button variant="outline" className="w-full">
+            {/* <Button variant="outline" className="w-full">
               Registrar con Google
-            </Button>
+            </Button> */}
           </div>
           <div className="mt-4 text-center text-sm">
             ¿Ya tiene una cuenta?{" "}

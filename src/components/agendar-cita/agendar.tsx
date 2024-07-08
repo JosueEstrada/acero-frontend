@@ -119,7 +119,7 @@ export default function AgendarCitaSection() {
         toast.error('Ups, sucedió un error');
       }
     }else{
-      toast.error('Cita ya existe');
+      toast.error('Cita ya existe, modificar la fecha');
     }
   };
 

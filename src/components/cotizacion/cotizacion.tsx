@@ -157,10 +157,10 @@ export default function CotizacionSection() {
         localStorage.setItem('alertMessage', 'Cotización enviada con éxito');
         router.push("/");
       } else {
-        toast.error('Ups, sucedió un error');
+        toast.error('Debes iniciar sesión');
       }
     } catch (error) {
-      toast.error('Ups, sucedió un error');
+      toast.error('Debes iniciar sesión');
     }
   };
 

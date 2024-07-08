@@ -45,13 +45,18 @@ export default function Navbar() {
         <span className="mx-4">|</span>
         <MailIcon className="h-4 w-4" />
         <span>proyectos@solinoxperu.com</span>
-        <Button
-          asChild
-          variant="outline"
-          className="justify-end font-bold text-primary"
-        >
-          <Link href="/acceso">Acceso</Link>
-        </Button>
+        {
+          !isLoggedIn && (
+          <Button
+            asChild
+            variant="outline"
+            className="justify-end font-bold text-primary"
+          >
+            <Link href="/acceso">Acceso</Link>
+          </Button>
+          )
+        }
+        
         {
           isLoggedIn && (
             <Button
